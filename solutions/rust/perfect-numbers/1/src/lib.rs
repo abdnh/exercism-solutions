@@ -1,0 +1,22 @@
+use std::cmp::Ordering;
+
+#[derive(Debug, PartialEq, Eq)]
+pub enum Classification {
+    Abundant,
+    Perfect,
+    Deficient,
+}
+
+pub fn classify(num: u64) -> Option<Classification> {
+    if num == 0 {
+        return None;
+    }
+    let sum = (1..num).filter_map(|i| (num % i == 0).then_some(i)).sum();
+    let class = match num.cmp(&sum) {
+        Ordering::Equal => Classification::Perfect,
+        Ordering::Greater => Classification::Deficient,
+        Ordering::Less => Classification::Abundant,
+    };
+
+    Some(class)
+}
